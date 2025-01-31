@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 
 # Set the full directory path where your images are stored
-charts_dir = Path("jira_analyzer/charts")
+charts_dir = Path("charts")
 
 # List of image files with standardized names
 image_files = [
