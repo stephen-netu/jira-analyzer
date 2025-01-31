@@ -1,5 +1,10 @@
 import subprocess
 import sys
+import os
+import logging
+import json
+from datetime import datetime, timedelta
+from collections import defaultdict
 
 # Debug information
 print("Python executable being used: ", sys.executable)
@@ -10,32 +15,29 @@ installed_packages = subprocess.run([sys.executable, "-m", "pip", "list"], captu
 print("Installed Packages: ")
 print(installed_packages.stdout)
 
-# Ensure matplotlib is installed
-try:
-    import matplotlib.pyplot as plt
-    print("matplotlib imported successfully!")
-except ImportError:
-    print("matplotlib not found. Attempting to install...")
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "matplotlib"])
-    import matplotlib.pyplot as plt
-    print("matplotlib installed successfully!")
+# Try importing required packages, install if missing
+required_packages = ['matplotlib', 'numpy', 'pandas', 'seaborn']
+for package in required_packages:
+    try:
+        __import__(package)
+    except ImportError:
+        print(f"{package} not found. Installing...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
-# Configure matplotlib for non-interactive backend
+# Now import matplotlib and other packages
 import matplotlib
-matplotlib.use('Agg')
-
-import argparse
-import datetime
-import logging
-import json
-import os
+matplotlib.use('Agg')  # Use non-interactive backend
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import seaborn as sns
 from jira import JIRA
 from dotenv import load_dotenv
 from collections import defaultdict
-import numpy as np
 import streamlit as st
+import argparse
+import logging
+import json
 
 # Load environment variables from .env file
 load_dotenv()
