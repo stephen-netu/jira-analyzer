@@ -46,7 +46,7 @@ def parse_args():
                                'developer_metrics', 'developer_focus', 'developer_trends',
                                'story_points_focus'],
                        help='Types of charts to generate')
-    parser.add_argument('--output-dir', default='D:/Projects/! Obsidian/3-Apr-2024/Remote/Noctal/charts', help='Directory for output charts')
+    parser.add_argument('--output-dir', default='Local Code/jira_analyzer/charts', help='Directory for output charts')
     
     args = parser.parse_args()
     os.makedirs(args.output_dir, exist_ok=True)
