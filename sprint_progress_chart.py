@@ -11,9 +11,15 @@ import os
 from dotenv import load_dotenv
 from collections import defaultdict
 import numpy as np
+import streamlit as st
 
-# Load environment variables
-load_dotenv()
+# Use secrets for authentication
+jira_url = st.secrets["JIRA_URL"]
+jira_username = st.secrets["JIRA_USERNAME"]
+jira_api_token = st.secrets["JIRA_API_TOKEN"]
+
+options = {"server": jira_url}
+jira = JIRA(options, basic_auth=(jira_username, jira_api_token))
 
 # Setup logging
 log = logging.getLogger('jira_metrics')

@@ -2,9 +2,16 @@ import streamlit as st
 from PIL import Image
 import os
 from pathlib import Path
+import subprocess
 
 # Set the full directory path where your images are stored
 charts_dir = Path("charts")
+
+# Run the script to generate charts
+try:
+    subprocess.run(["python", "sprint_progress_chart.py"], check=True)
+except subprocess.CalledProcessError as e:
+    st.error(f"Error generating charts: {e}")
 
 # List of image files with standardized names
 image_files = [
