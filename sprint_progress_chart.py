@@ -26,6 +26,10 @@ except Exception:
     jira_username = os.getenv("JIRA_USERNAME")
     jira_api_token = os.getenv("JIRA_API_TOKEN")
 
+# Ensure essential environment variables are set
+if not all([jira_url, jira_username, jira_api_token]):
+    raise ValueError("Missing one or more required environment variables: JIRA_URL, JIRA_USERNAME, JIRA_API_TOKEN.")
+
 options = {"server": jira_url}
 jira = JIRA(options, basic_auth=(jira_username, jira_api_token))
 

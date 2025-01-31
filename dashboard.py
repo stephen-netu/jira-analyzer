@@ -7,11 +7,21 @@ import subprocess
 # Set the full directory path where your images are stored
 charts_dir = Path("charts")
 
+# Create the directory if it doesn't exist
+if not os.path.exists(charts_dir):
+    os.makedirs(charts_dir)
+    st.write("Directory was missing. Created the directory.")
+else:
+    st.write("Directory exists.")
+
 # Run the script to generate charts
 try:
     subprocess.run(["python", "sprint_progress_chart.py"], check=True)
+    st.success("Charts generated successfully!")
 except subprocess.CalledProcessError as e:
-    st.error(f"Error generating charts: {e}")
+    st.error(f"Failed to generate charts. Error: {e}")
+except FileNotFoundError:
+    st.error("'sprint_progress_chart.py' script not found!")
 
 # List of image files with standardized names
 image_files = [
@@ -31,12 +41,6 @@ image_files = [
 
 # Streamlit app
 st.title("Interactive Dashboard")
-
-# Check if the directory exists
-if os.path.exists(charts_dir):
-    print("Directory exists")
-else:
-    print("Directory does not exist")
 
 # Display images
 for image_file in image_files:
