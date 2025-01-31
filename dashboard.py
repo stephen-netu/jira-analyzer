@@ -3,6 +3,8 @@ from PIL import Image
 import os
 from pathlib import Path
 import subprocess
+import sys
+import pkg_resources
 
 # Set the full directory path where your images are stored
 charts_dir = Path("charts")
@@ -51,3 +53,13 @@ for image_file in image_files:
         st.image(image, caption=image_file, use_container_width=True)
     else:
         st.write(f"File not found: {image_path}")
+
+# Debugging: List installed packages
+installed_packages = [dist.project_name for dist in pkg_resources.working_set]
+st.write("Installed Packages:", installed_packages)
+
+# Fallback installation for matplotlib
+try:
+    import matplotlib
+except ImportError:
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "matplotlib"])
