@@ -1,9 +1,10 @@
 import streamlit as st
 from PIL import Image
 import os
+from pathlib import Path
 
 # Set the full directory path where your images are stored
-image_dir = 'D:/Projects/! Obsidian/3-Apr-2024/Remote/Noctal/charts'
+charts_dir = Path("jira_analyzer/charts")
 
 # List of image files with standardized names
 image_files = [
@@ -25,14 +26,14 @@ image_files = [
 st.title("Interactive Dashboard")
 
 # Check if the directory exists
-if os.path.exists(image_dir):
+if os.path.exists(charts_dir):
     print("Directory exists")
 else:
     print("Directory does not exist")
 
 # Display images
 for image_file in image_files:
-    image_path = os.path.join(image_dir, image_file)
+    image_path = charts_dir / image_file
     print(f"Checking image path: {image_path}")
     if os.path.exists(image_path):
         image = Image.open(image_path)
