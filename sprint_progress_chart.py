@@ -1,10 +1,64 @@
-import subprocess
-import sys
 import os
+import sys
+import subprocess
 import logging
 import json
 from datetime import datetime, timedelta
 from collections import defaultdict
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Function to ensure package is installed
+def ensure_package(package_name):
+    try:
+        __import__(package_name)
+    except ImportError:
+        logger.info(f"Installing {package_name}...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package_name])
+
+# Required packages
+required_packages = ['matplotlib', 'numpy', 'pandas', 'seaborn']
+for package in required_packages:
+    ensure_package(package)
+
+# Now import matplotlib and set backend
+import matplotlib
+matplotlib.use('Agg')  # Set non-interactive backend
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+import numpy as np
+from jira import JIRA
+from dotenv import load_dotenv
+import streamlit as st
+import argparse
+
+# Load environment variables
+load_dotenv()
+
+# JIRA configuration
+jira_url = os.getenv("JIRA_URL")
+jira_username = os.getenv("JIRA_USERNAME")
+jira_api_token = os.getenv("JIRA_API_TOKEN")
+
+if not all([jira_url, jira_username, jira_api_token]):
+    logger.error("Missing JIRA credentials. Please check your .env file")
+    sys.exit(1)
+
+# Set up JIRA client
+options = {
+    'server': jira_url,
+    'verify': True
+}
+
+try:
+    jira = JIRA(options, basic_auth=(jira_username, jira_api_token))
+    logger.info("Successfully connected to JIRA")
+except Exception as e:
+    logger.error(f"Failed to connect to JIRA: {e}")
+    sys.exit(1)
 
 # Debug information
 print("Python executable being used: ", sys.executable)
@@ -14,15 +68,6 @@ print("Python paths: ", sys.path)
 installed_packages = subprocess.run([sys.executable, "-m", "pip", "list"], capture_output=True, text=True)
 print("Installed Packages: ")
 print(installed_packages.stdout)
-
-# Try importing required packages, install if missing
-required_packages = ['matplotlib', 'numpy', 'pandas', 'seaborn']
-for package in required_packages:
-    try:
-        __import__(package)
-    except ImportError:
-        print(f"{package} not found. Installing...")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 # Now import matplotlib and other packages
 import matplotlib

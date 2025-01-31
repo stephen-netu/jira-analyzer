@@ -7,6 +7,8 @@ from importlib.metadata import distributions
 
 # Debug: List installed packages
 installed_packages = [dist.metadata["Name"] for dist in distributions()]
+st.write("Python executable being used: ", sys.executable)
+st.write("Python paths: ", sys.path)
 st.write("Installed Packages:", installed_packages)
 
 # Set the full directory path where your images are stored
