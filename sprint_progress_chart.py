@@ -1,13 +1,37 @@
+import subprocess
+import sys
+
+# Debug information
+print("Python executable being used: ", sys.executable)
+print("Python paths: ", sys.path)
+
+# Debug to check if matplotlib is installed
+installed_packages = subprocess.run([sys.executable, "-m", "pip", "list"], capture_output=True, text=True)
+print("Installed Packages: ")
+print(installed_packages.stdout)
+
+# Ensure matplotlib is installed
+try:
+    import matplotlib.pyplot as plt
+    print("matplotlib imported successfully!")
+except ImportError:
+    print("matplotlib not found. Attempting to install...")
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "matplotlib"])
+    import matplotlib.pyplot as plt
+    print("matplotlib installed successfully!")
+
+# Configure matplotlib for non-interactive backend
+import matplotlib
+matplotlib.use('Agg')
+
 import argparse
 import datetime
 import logging
-import sys
 import json
-import matplotlib.pyplot as plt
+import os
 import pandas as pd
 import seaborn as sns
 from jira import JIRA
-import os
 from dotenv import load_dotenv
 from collections import defaultdict
 import numpy as np
