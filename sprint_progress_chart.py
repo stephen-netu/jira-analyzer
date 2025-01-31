@@ -13,10 +13,18 @@ from collections import defaultdict
 import numpy as np
 import streamlit as st
 
+# Load environment variables from .env file
+load_dotenv()
+
 # Use secrets for authentication
-jira_url = st.secrets["JIRA_URL"]
-jira_username = st.secrets["JIRA_USERNAME"]
-jira_api_token = st.secrets["JIRA_API_TOKEN"]
+try:
+    jira_url = st.secrets["JIRA_URL"]
+    jira_username = st.secrets["JIRA_USERNAME"]
+    jira_api_token = st.secrets["JIRA_API_TOKEN"]
+except Exception:
+    jira_url = os.getenv("JIRA_URL")
+    jira_username = os.getenv("JIRA_USERNAME")
+    jira_api_token = os.getenv("JIRA_API_TOKEN")
 
 options = {"server": jira_url}
 jira = JIRA(options, basic_auth=(jira_username, jira_api_token))
